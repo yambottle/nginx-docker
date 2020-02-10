@@ -1,0 +1,34 @@
+version: '2.2'
+x-net: &net
+  networks:
+      - main
+services:
+  fakeservices.datajoint.io:
+    <<: *net
+    image: raphaelguzman/nginx:v0.0.2
+    environment:
+    # Supply 3 configs in the convention ADD_{service}_{config}
+    # Options are DATABASE, MINIO, REST
+    - ADD_db_TYPE=DATABASE
+    # Target endpoint
+    - ADD_db_ENDPOINT=db:3306
+    # Not needed for DATABASE.
+    # For REST and MINIO will route based on prefix
+    - ADD_db_PREFIX=/api
+    # Expose ports to allow unencrypted and encrypted access
+    ports:
+      - "443:443"
+      - "3306:3306"
+  db:
+    <<: *net
+    image: datajoint/mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=simple
+    # ports:
+    #   - "3306:3306"
+    # To persist MySQL data
+    # volumes:
+    #   - ./mysql/data:/var/lib/mysql
+    #   - ./mysql/my.cnf:/etc/mysql/my.cnf
+networks:
+  main:
