@@ -5,17 +5,23 @@ x-net: &net
 services:
   fakeservices.datajoint.io:
     <<: *net
-    image: raphaelguzman/nginx:v0.0.2
+    image: raphaelguzman/nginx:v0.0.3
     environment:
-    # Supply 3 configs in the convention ADD_{service}_{config}
-    # Options are DATABASE, MINIO, REST
+    ## Supply 3 configs in the convention ADD_{service}_{config}
+    ## Options are DATABASE, MINIO, REST
     - ADD_db_TYPE=DATABASE
-    # Target endpoint
+    ## Target endpoint
     - ADD_db_ENDPOINT=db:3306
-    # Not needed for DATABASE.
-    # For REST and MINIO will route based on prefix
+    ## Not needed for DATABASE.
+    ## For REST and MINIO will route based on prefix
     - ADD_db_PREFIX=/api
-    # Expose ports to allow unencrypted and encrypted access
+    ## For custom domain
+    # - SUBDOMAINS=fakeservices
+    # - URL=datajoint.io
+    # volumes:
+    #   - ./nginx/privkey.pem:/certs/privkey.pem:ro
+    #   - ./nginx/fullchain.pem:/certs/fullchain.pem:ro
+    ## Expose ports to allow unencrypted and encrypted access
     ports:
       - "443:443"
       - "3306:3306"
@@ -26,7 +32,7 @@ services:
       - MYSQL_ROOT_PASSWORD=simple
     # ports:
     #   - "3306:3306"
-    # To persist MySQL data
+    ## To persist MySQL data
     # volumes:
     #   - ./mysql/data:/var/lib/mysql
     #   - ./mysql/my.cnf:/etc/mysql/my.cnf

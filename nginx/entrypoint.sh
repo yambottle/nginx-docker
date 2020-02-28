@@ -1,4 +1,9 @@
 #! /bin/sh
+
+if [ ! -z "$SUBDOMAINS" ]; then 
+    export SUBDOMAINS=${SUBDOMAINS}.
+fi
+
 cp /base.conf /etc/nginx/conf.d/base.conf
 cp /nginx.conf /etc/nginx/nginx.conf
 
@@ -20,7 +25,7 @@ env | grep ADD | sort | while IFS= read -r line; do
             sed -i '1 i\
 server {\
   listen '${port}';\
-  server_name {{SUBDOMAINS}}.{{URL}};\
+  server_name {{SUBDOMAINS}}{{URL}};\
   client_max_body_size 0;\
   proxy_buffering off;\
   ignore_invalid_headers off;\
@@ -59,7 +64,7 @@ EOT
             sed -i '1 i\
 server {\
   listen '${port}';\
-  server_name {{SUBDOMAINS}}.{{URL}};\
+  server_name {{SUBDOMAINS}}{{URL}};\
   \
   location '${TEMP_PREFIX}'/ {\
     proxy_pass http://'${TEMP_ENDPOINT}'/;\
