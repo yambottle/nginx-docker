@@ -102,24 +102,24 @@ sed -i "s|{{URL}}|${URL}|g" /etc/nginx/conf.d/ssl.conf
 # cat /etc/nginx/conf.d/ssl.conf
 
 mv /etc/nginx/conf.d/ssl.conf /tmp/ssl.conf
-
 # nginx -g "daemon off;"
 nginx
 
 echo "[$(date -u '+%Y-%m-%d %H:%M:%S')][DataJoint]: Waiting for initial certs"
-while [ ! -d /etc/letsencrypt/live/${SUBDOMAINS}.${URL} ]; do
+while [ ! -d /etc/letsencrypt/live/${SUBDOMAINS}${URL} ]; do
     sleep 5
 done
 echo "[$(date -u '+%Y-%m-%d %H:%M:%S')][DataJoint]: Enabling SSL feature"
 mv /tmp/ssl.conf /etc/nginx/conf.d/ssl.conf
 update_cert
 
+echo "[$(date -u '+%Y-%m-%d %H:%M:%S')][DataJoint]: Monitoring SSL Cert changes..."
 INIT_TIME=$(date +%s)
-LAST_MOD_TIME=$(date -r $(echo /etc/letsencrypt/live/${SUBDOMAINS}.${URL}/$(ls -t /etc/letsencrypt/live/${SUBDOMAINS}.${URL}/ | head -n 1)) +%s)
+LAST_MOD_TIME=$(date -r $(echo /etc/letsencrypt/live/${SUBDOMAINS}${URL}/$(ls -t /etc/letsencrypt/live/${SUBDOMAINS}${URL}/ | head -n 1)) +%s)
 DELTA=$(expr $LAST_MOD_TIME - $INIT_TIME)
 while true; do
-    CURR_FILEPATH=$(ls -t /etc/letsencrypt/live/${SUBDOMAINS}.${URL}/ | head -n 1)
-    CURR_LAST_MOD_TIME=$(date -r $(echo /etc/letsencrypt/live/${SUBDOMAINS}.${URL}/${CURR_FILEPATH}) +%s)
+    CURR_FILEPATH=$(ls -t /etc/letsencrypt/live/${SUBDOMAINS}${URL}/ | head -n 1)
+    CURR_LAST_MOD_TIME=$(date -r $(echo /etc/letsencrypt/live/${SUBDOMAINS}${URL}/${CURR_FILEPATH}) +%s)
     CURR_DELTA=$(expr $CURR_LAST_MOD_TIME - $INIT_TIME)
     if [ "$DELTA" -lt "$CURR_DELTA" ]; then
         echo "[$(date -u '+%Y-%m-%d %H:%M:%S')][DataJoint]: Renewal: Reloading NGINX since \`$CURR_FILEPATH\` changed."
