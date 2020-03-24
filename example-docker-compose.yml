@@ -19,8 +19,8 @@ services:
     # - SUBDOMAINS=fakeservices
     # - URL=datajoint.io
     # volumes:
-    #   - ./nginx/privkey.pem:/certs/privkey.pem:ro
-    #   - ./nginx/fullchain.pem:/certs/fullchain.pem:ro
+    #   - ./nginx/privkey.pem:/etc/letsencrypt/live/fakeservices.datajoint.io/privkey.pem:ro
+    #   - ./nginx/fullchain.pem:/etc/letsencrypt/live/fakeservices.datajoint.io/fullchain.pem:ro
     ## Expose ports to allow unencrypted and encrypted access
     ports:
       - "443:443"
