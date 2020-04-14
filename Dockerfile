@@ -4,7 +4,7 @@ COPY ./nginx/base.conf /base.conf
 COPY ./nginx/ssl.conf /ssl.conf
 COPY ./nginx/nginx.conf /nginx.conf
 COPY ./nginx/entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+RUN apk add openssl && chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 HEALTHCHECK       \
     --timeout=5s \
