@@ -10,6 +10,13 @@ if [ ! -z "$SUBDOMAINS" ]; then
 fi
 
 cp /base.conf /etc/nginx/conf.d/base.conf
+if [ ! -z "$CERTBOT_HOST" ]; then 
+    sed -i '$ i\
+  location /.well-known/acme-challenge/ {\
+    proxy_pass http://'${CERTBOT_HOST}';\
+  }\
+' /etc/nginx/conf.d/base.conf
+fi
 cp /ssl.conf /etc/nginx/conf.d/ssl.conf
 cp /nginx.conf /etc/nginx/nginx.conf
 
