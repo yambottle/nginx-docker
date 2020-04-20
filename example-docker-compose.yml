@@ -5,7 +5,7 @@ x-net: &net
 services:
   fakeservices.datajoint.io:
     <<: *net
-    image: raphaelguzman/nginx:v0.0.4
+    image: raphaelguzman/nginx:v0.0.5
     environment:
     ## Supply 3 configs in the convention ADD_{service}_{config}
     ## Options are DATABASE, MINIO, REST
@@ -15,7 +15,8 @@ services:
     ## Not needed for DATABASE.
     ## For REST and MINIO will route based on prefix
     - ADD_db_PREFIX=/api
-    ## For custom domain
+    ## For custom domain/renewal
+    # - CERTBOT_HOST=letsencrypt:80
     # - SUBDOMAINS=fakeservices
     # - URL=datajoint.io
     # volumes:
