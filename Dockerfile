@@ -1,7 +1,5 @@
 FROM nginx:alpine
 
-# COPY ./nginx/base.conf /base.conf
-# COPY ./nginx/ssl.conf /ssl.conf
 COPY ./nginx/http.conf /http.conf
 COPY ./nginx/https.conf /https.conf
 COPY ./nginx/nginx.conf /nginx.conf

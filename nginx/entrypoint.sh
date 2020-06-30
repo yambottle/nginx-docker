@@ -157,13 +157,6 @@ if [ ! -z "$CERTBOT_HOST" ]; then
     sed -i "s|{{PORT}}|80|g" /etc/nginx/conf.d/port_80.conf
 fi
 
-# echo "--------DEBUG: CURRENT NGINX CONF--------"
-# cat /etc/nginx/nginx.conf
-# echo "--------DEBUG: CURRENT HTTP CONF--------"
-# cat /etc/nginx/conf.d/base.conf
-# echo "--------DEBUG: CURRENT SSL CONF--------"
-# cat /etc/nginx/conf.d/ssl.conf
-
 if [ ! -f "/etc/nginx/conf.d/port_443.conf" ]; then
     nginx -g "daemon off;"
 else
