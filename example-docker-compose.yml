@@ -5,13 +5,15 @@ x-net: &net
 services:
   fakeservices.datajoint.io:
     <<: *net
-    image: raphaelguzman/nginx:v0.0.5
+    image: raphaelguzman/nginx:v0.0.7
     environment:
     ## Supply 3 configs in the convention ADD_{service}_{config}
-    ## Options are DATABASE, MINIO, REST
+    ## Options are DATABASE, MINIO, MINIOADMIN, REST
     - ADD_db_TYPE=DATABASE
     ## Target endpoint
     - ADD_db_ENDPOINT=db:3306
+    ## Optional port change
+    # - ADD_db_PORT=7891
     ## Not needed for DATABASE.
     ## For REST and MINIO will route based on prefix
     - ADD_db_PREFIX=/api
@@ -19,6 +21,8 @@ services:
     # - CERTBOT_HOST=letsencrypt:80
     # - SUBDOMAINS=fakeservices
     # - URL=datajoint.io
+    ## For HTTPS redirect pass through
+    # - HTTPS_PASSTHRU=TRUE
     # volumes:
     #   - ./nginx/privkey.pem:/etc/letsencrypt/live/fakeservices.datajoint.io/privkey.pem:ro
     #   - ./nginx/fullchain.pem:/etc/letsencrypt/live/fakeservices.datajoint.io/fullchain.pem:ro

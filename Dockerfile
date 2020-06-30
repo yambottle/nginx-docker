@@ -1,10 +1,13 @@
 FROM nginx:alpine
 
-COPY ./nginx/base.conf /base.conf
-COPY ./nginx/ssl.conf /ssl.conf
+COPY ./nginx/http.conf /http.conf
+COPY ./nginx/https.conf /https.conf
 COPY ./nginx/nginx.conf /nginx.conf
 COPY ./nginx/entrypoint.sh /entrypoint.sh
-RUN apk add openssl && chmod +x /entrypoint.sh
+RUN \
+    apk add openssl && \
+    chmod +x /entrypoint.sh && \
+    rm /etc/nginx/conf.d/default.conf
 ENTRYPOINT ["/entrypoint.sh"]
 HEALTHCHECK       \
     --timeout=5s \
