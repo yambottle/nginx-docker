@@ -156,11 +156,18 @@ if [ ! -z "$CERTBOT_HOST" ]; then
     sed -i "s|{{URL}}|${URL}|g" /etc/nginx/conf.d/port_80.conf
     sed -i "s|{{PORT}}|80|g" /etc/nginx/conf.d/port_80.conf
 fi
+if [ -z "$HTTPS_PORT" ]; then
+    HTTPS_PORT=443
+else
+    mv /etc/nginx/conf.d/port_443.conf /etc/nginx/conf.d/port_${HTTPS_PORT}.conf
+fi
+sed -i "s|{{HTTPS_PORT}}|${HTTPS_PORT}|g" /etc/nginx/conf.d/port_${HTTPS_PORT}.conf
 
-if [ ! -f "/etc/nginx/conf.d/port_443.conf" ]; then
+
+if [ ! -f "/etc/nginx/conf.d/port_${HTTPS_PORT}.conf" ]; then
     nginx -g "daemon off;"
 else
-    mv /etc/nginx/conf.d/port_443.conf /tmp/port_443.conf
+    mv /etc/nginx/conf.d/port_${HTTPS_PORT}.conf /tmp/port_${HTTPS_PORT}.conf
     nginx
 
     echo "[$(date -u '+%Y-%m-%d %H:%M:%S')][DataJoint]: Waiting for initial certs"
@@ -168,7 +175,7 @@ else
         sleep 5
     done
     echo "[$(date -u '+%Y-%m-%d %H:%M:%S')][DataJoint]: Enabling SSL feature"
-    mv /tmp/port_443.conf /etc/nginx/conf.d/port_443.conf
+    mv /tmp/port_${HTTPS_PORT}.conf /etc/nginx/conf.d/port_${HTTPS_PORT}.conf
     update_cert
 
     echo "[$(date -u '+%Y-%m-%d %H:%M:%S')][DataJoint]: Monitoring SSL Cert changes..."
