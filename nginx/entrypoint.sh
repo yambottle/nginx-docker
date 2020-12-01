@@ -72,7 +72,7 @@ env | grep ADD | sort | while IFS= read -r line; do
             sed -i "$REPLACE" /etc/nginx/conf.d/port_443.conf
         elif [ "$TEMP_TYPE" = "MINIOADMIN" ]; then
             REPLACE='$ i\
-  location /minio/ {\
+  location ~ ^/minio/?(.*)$ {\
     client_max_body_size 0;\
     proxy_buffering off;\
     #access_log off;\
@@ -84,7 +84,7 @@ env | grep ADD | sort | while IFS= read -r line; do
     proxy_http_version 1.1;\
     proxy_set_header Connection "";\
     chunked_transfer_encoding off;\
-    proxy_pass http://'${TEMP_ENDPOINT}'/minio/;\
+    proxy_pass http://'${TEMP_ENDPOINT}'/minio/$1;\
   }\
 '
             sed -i "$REPLACE" /etc/nginx/conf.d/port_${port}.conf
@@ -104,8 +104,8 @@ stream {
 EOT
         else
             REPLACE='$ i\
-  location '${TEMP_PREFIX}'/ {\
-    proxy_pass http://'${TEMP_ENDPOINT}'/;\
+  location ~ ^'${TEMP_PREFIX}'/?(.*)$ {\
+    proxy_pass http://'${TEMP_ENDPOINT}'/$1;\
   }\
 '
             sed -i "$REPLACE" /etc/nginx/conf.d/port_${port}.conf
@@ -147,8 +147,8 @@ if [ ! -z "$CERTBOT_HOST" ]; then
         cp /http.conf /etc/nginx/conf.d/port_80.conf
     fi
     REPLACE='$ i\
-  location /.well-known/acme-challenge/ {\
-    proxy_pass http://'${CERTBOT_HOST}';\
+  location ~ ^/.well-known/acme-challenge/?(.*)$ {\
+    proxy_pass http://'${CERTBOT_HOST}'/$1;\
   }\
 '
     sed -i "$REPLACE" /etc/nginx/conf.d/port_80.conf
