@@ -2,6 +2,6 @@ version: '2.2'
 services:
   fakeservices.datajoint.io:
     build: .
-    image: raphaelguzman/nginx:v0.0.12
+    image: raphaelguzman/nginx:v0.0.13
     ports:
       - "443:443"
