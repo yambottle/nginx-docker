@@ -148,7 +148,7 @@ if [ ! -z "$CERTBOT_HOST" ]; then
     fi
     REPLACE='$ i\
   location ~ ^/.well-known/acme-challenge/?(.*)$ {\
-    proxy_pass http://'${CERTBOT_HOST}'/$1;\
+    proxy_pass http://'${CERTBOT_HOST}';\
   }\
 '
     sed -i "$REPLACE" /etc/nginx/conf.d/port_80.conf
