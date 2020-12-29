@@ -16,6 +16,8 @@ env | grep ADD | sort | while IFS= read -r line; do
     TEMP_VALUE=$(echo $line | cut -d'=' -f2)
     if echo $TEMP_VAR | grep ENDPOINT; then 
         TEMP_ENDPOINT=$TEMP_VALUE
+    elif echo $TEMP_VAR | grep TARGET_PREFIX; then
+        TEMP_TARGET_PREFIX=$TEMP_VALUE
     elif echo $TEMP_VAR | grep PREFIX; then 
         TEMP_PREFIX=$TEMP_VALUE
     elif echo $TEMP_VAR | grep PORT; then 
@@ -92,20 +94,23 @@ env | grep ADD | sort | while IFS= read -r line; do
         elif [ "$TEMP_TYPE" = "DATABASE" ]; then
             tee -a /etc/nginx/nginx.conf > /dev/null <<EOT
 stream {
-    upstream target_${service} {
-    server ${TEMP_ENDPOINT};
-  }
+    resolver 127.0.0.11 valid=30s; # Docker DNS Server
 
-  server {
-    listen 3306;
-    proxy_pass target_${service};
-  }
+    # a hack to declare $server_us variable
+    map "" \$server_$(echo $service | tr '-' '_') {
+        default ${TEMP_ENDPOINT};
+    }
+
+    server {
+        listen 3306;
+        proxy_pass \$server_$(echo $service | tr '-' '_');
+    }
 }
 EOT
         else
             REPLACE='$ i\
   location ~ ^'${TEMP_PREFIX}'/?(.*)$ {\
-    proxy_pass http://'${TEMP_ENDPOINT}'/$1;\
+    proxy_pass http://'${TEMP_ENDPOINT}${TEMP_TARGET_PREFIX}'/$1;\
   }\
 '
             sed -i "$REPLACE" /etc/nginx/conf.d/port_${port}.conf
@@ -119,6 +124,7 @@ EOT
         TEMP_ENDPOINT=""
         TEMP_PREFIX=""
         TEMP_PORT=""
+        TEMP_TARGET_PREFIX=""
         TEMP_TYPE=""
     fi
 done
