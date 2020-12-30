@@ -110,7 +110,11 @@ EOT
         else
             REPLACE='$ i\
   location ~ ^'${TEMP_PREFIX}'/?(.*)$ {\
-    proxy_pass http://'${TEMP_ENDPOINT}${TEMP_TARGET_PREFIX}'/$1;\
+    proxy_set_header  X-Forwarded-Host $host:$server_port'${TEMP_PREFIX}';\
+    proxy_set_header  X-Forwarded-Proto $scheme;\
+    proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;\
+    proxy_set_header  X-Real-IP $remote_addr;\
+    proxy_pass http://'${TEMP_ENDPOINT}${TEMP_TARGET_PREFIX}'/$1$is_args$args;\
     # allow websocket upgrade (jupyter lab)\
     proxy_http_version 1.1;\
     proxy_set_header Upgrade "websocket";\
