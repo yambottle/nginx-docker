@@ -5,7 +5,7 @@ x-net: &net
 services:
   fakeservices.datajoint.io:
     <<: *net
-    image: raphaelguzman/nginx:v0.0.13
+    image: raphaelguzman/nginx:v0.0.14
     environment:
     ## Supply 3 configs in the convention ADD_{service}_{config}
     ## Options are DATABASE, MINIO, MINIOADMIN, REST
