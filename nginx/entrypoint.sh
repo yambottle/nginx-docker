@@ -117,7 +117,7 @@ EOT
     proxy_pass http://'${TEMP_ENDPOINT}${TEMP_TARGET_PREFIX}'/$1$is_args$args;\
     # allow websocket upgrade (jupyter lab)\
     proxy_http_version 1.1;\
-    proxy_set_header Upgrade "websocket";\
+    proxy_set_header Upgrade $http_upgrade;\
     proxy_set_header Connection "Upgrade";\
     proxy_read_timeout 86400;\
   }\
