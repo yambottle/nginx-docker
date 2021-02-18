@@ -32,7 +32,7 @@ env | grep ADD | sort | while IFS= read -r line; do
         if [ ! -z "$TEMP_PORT" ] && [ ! "$TEMP_PORT" = "" ]; then
             port=$TEMP_PORT
         fi
-        if [ ! -f "/etc/nginx/conf.d/port_${port}.conf" ] && [ ! "$TEMP_TYPE" = "DATABASE" ]; then
+        if [ ! -f "/etc/nginx/conf.d/port_${port}.conf" ] && [ ! "$TEMP_TYPE" = "DATABASE" ] && [ ! "$TEMP_TYPE" = "STATIC" ]; then
             cp /http.conf /etc/nginx/conf.d/port_${port}.conf
             if [ ! -f "/etc/nginx/conf.d/port_443.conf" ]; then
                 cp /https.conf /etc/nginx/conf.d/port_443.conf
@@ -107,6 +107,15 @@ stream {
     }
 }
 EOT
+        elif [ "$TEMP_TYPE" = "STATIC" ]; then
+            REPLACE='$ i\
+  location ~ ^'${TEMP_PREFIX}'/?(.*)$ {\
+    root   /usr/share/nginx/html;\
+    index  index.html index.htm;\
+    try_files $uri /index.html;\
+  }\
+'
+            sed -i "$REPLACE" /etc/nginx/conf.d/port_443.conf
         else
             REPLACE='$ i\
   location ~ ^'${TEMP_PREFIX}'/?(.*)$ {\
