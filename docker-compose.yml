@@ -1,7 +1,8 @@
+# docker-compose build && docker-compose push
 version: '2.2'
 services:
   fakeservices.datajoint.io:
     build: .
-    image: datajoint/nginx:v0.0.15
+    image: datajoint/nginx:v0.0.16
     ports:
       - "443:443"
