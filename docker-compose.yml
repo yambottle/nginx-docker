@@ -1,5 +1,5 @@
-# docker-compose build && docker-compose push
-version: '2.2'
+# docker buildx bake --set "*.platform=linux/amd64" --load && docker-compose push
+version: '3.7'
 services:
   fakeservices.datajoint.io:
     build: .
