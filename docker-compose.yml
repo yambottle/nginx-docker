@@ -3,6 +3,6 @@ version: '3.7'
 services:
   fakeservices.datajoint.io:
     build: .
-    image: datajoint/nginx:v0.0.18
+    image: datajoint/nginx:v0.0.19
     ports:
       - "443:443"
