@@ -14,7 +14,7 @@ HEALTHCHECK       \
     --retries=300  \
     --interval=1s \
     CMD           \
-        ps -a | grep master | grep -v grep
+        ps -a | grep -e "root.*nginx" | grep -v grep
 
 # DATAJOINT DEFAULTS
 COPY ./nginx/privkey.pem /etc/letsencrypt/live/fakeservices.datajoint.io/privkey.pem
