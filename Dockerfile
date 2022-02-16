@@ -2,6 +2,7 @@ FROM python:alpine
 
 COPY ./nginx/entrypoint.py /entrypoint.py
 RUN \
+    apk update && \
     apk add openssl nginx nginx-mod-stream && \
     pip install \
         --platform=manylinux2010_x86_64 \
