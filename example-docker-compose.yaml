@@ -13,7 +13,7 @@ services:
       ## Example database
       - ADD_db_ENDPOINT=db:3306
       - ADD_db_TYPE=DATABASE
-      ## Example RESt API
+      ## Example REST API
       - ADD_pharus_ENDPOINT=pharus:5000
       - ADD_pharus_PREFIX=/api
       - ADD_pharus_TYPE=REST
