@@ -1,20 +1,26 @@
-FROM nginx:alpine
+FROM python:alpine
 
-COPY ./nginx/http.conf /http.conf
-COPY ./nginx/https.conf /https.conf
-COPY ./nginx/nginx.conf /nginx.conf
-COPY ./nginx/entrypoint.sh /entrypoint.sh
+COPY ./nginx/entrypoint.py /entrypoint.py
 RUN \
-    apk add openssl && \
-    chmod +x /entrypoint.sh && \
-    rm /etc/nginx/conf.d/default.conf
-ENTRYPOINT ["/entrypoint.sh"]
+    apk add openssl nginx nginx-mod-stream && \
+    pip install \
+        --platform=manylinux2010_x86_64 \
+        --only-binary=:all: \
+        --target=/usr/local/lib/python3.10/site-packages \
+        --no-cache-dir \
+        cffi && \
+    pip install otumat && \
+    chmod +x /entrypoint.py && \
+    rm /etc/nginx/http.d/default.conf
+ENTRYPOINT ["/entrypoint.py"]
 HEALTHCHECK       \
-    --timeout=5s \
-    --retries=300  \
-    --interval=1s \
+    --timeout=30s \
+    --retries=5  \
+    --interval=15s \
     CMD           \
-        ps -a | grep -e "root.*nginx" | grep -v grep
+    ps -a | grep -e "root.*nginx" | grep -v grep
+
+CMD ["main"]
 
 # DATAJOINT DEFAULTS
 COPY ./nginx/privkey.pem /etc/letsencrypt/live/fakeservices.datajoint.io/privkey.pem
