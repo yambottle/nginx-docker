@@ -1,0 +1,63 @@
+# docker-compose -f ./example-docker-compose.yaml up
+version: '2.2'
+x-net:
+  &net
+  networks:
+    - main
+services:
+  fakeservices.datajoint.io:
+    <<: *net
+    image: datajoint/nginx:v0.1.0
+    environment:
+      ## Supply configs in the convention ADD_{service}_{config}
+      ## Example database
+      - ADD_db_ENDPOINT=db:3306
+      - ADD_db_TYPE=DATABASE
+      ## Example REST API
+      - ADD_pharus_ENDPOINT=pharus:5000
+      - ADD_pharus_PREFIX=/api
+      - ADD_pharus_TYPE=REST
+      - ADD_pharus_PORT=2500  # optional port change
+      - ADD_pharus_TARGETPREFIX=/v0  # optional prefix map
+      ## Example S3 with bucket prefix
+      - ADD_minio_ENDPOINT=minio:9000
+      - ADD_minio_PREFIX=/datajoint
+      - ADD_minio_TYPE=MINIO
+      - ADD_minio_PORT=8000  # optional port change
+      ## Example MinIO Console Browser
+      - ADD_minioadmin_ENDPOINT=minio:9000
+      - ADD_minioadmin_TYPE=MINIOADMIN
+      - ADD_minioadmin_PORT=7000  # optional port change
+      ## Example static file serve
+      - ADD_zlabbook_PREFIX=/
+      - ADD_zlabbook_TYPE=STATIC
+      - ADD_zlabbook_PORT=2000  # optional port change
+      ## Example add certbot
+      - CERTBOT_HOST=letsencrypt:80
+      ## Example override default domain spec
+      - SUBDOMAINS=subdomain1
+      - URL=domain.com
+      ## Example upgrade HTTP -> HTTPS
+      - HTTPS_PASSTHRU=TRUE
+    volumes:
+      ## needed only if specifying a custom domain with encryption
+      - ./nginx/privkey.pem:/etc/letsencrypt/live/fakeservices.datajoint.io/privkey.pem:ro
+      - ./nginx/fullchain.pem:/etc/letsencrypt/live/fakeservices.datajoint.io/fullchain.pem:ro
+    ports:
+      ## Expose ports to allow unencrypted and encrypted access
+      - "80:80"
+      - "443:443"
+      - "3306:3306"
+  db:
+    <<: *net
+    image: datajoint/mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=simple
+    # ports:
+    #   - "3306:3306"
+    ## To persist MySQL data
+    # volumes:
+    #   - ./mysql/data:/var/lib/mysql
+    #   - ./mysql/my.cnf:/etc/mysql/my.cnf
+networks:
+  main:

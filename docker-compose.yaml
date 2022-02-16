@@ -1,8 +1,8 @@
 # docker buildx bake --set "*.platform=linux/amd64" --load && docker-compose push
-version: '3.7'
+version: '2.4'
 services:
   fakeservices.datajoint.io:
     build: .
-    image: datajoint/nginx:v0.0.20
+    image: datajoint/nginx:v0.1.0
     ports:
       - "443:443"
