@@ -210,7 +210,11 @@ def main():
             service_lookup[service_name][service_config] = (
                 "" if service_config == "prefix" and v == "/" else v.lower()
             )
-            if service_config == "type" and "port" not in service_lookup[service_name]:
+            if (
+                service_config == "type"
+                and v.lower() != "static"
+                and "port" not in service_lookup[service_name]
+            ):
                 service_lookup[service_name]["port"] = service_lookup[service_name][
                     "endpoint"
                 ].split(":")[1]
