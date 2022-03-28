@@ -221,7 +221,6 @@ def main():
     # write individual port configs
     locations = ""
     for k, v in service_lookup.items():
-        port_config_path = f"/etc/nginx/http.d/port_{v['port']}.conf"
         if v["type"] == "database":
             with open("/etc/nginx/nginx.conf", "a") as f:
                 f.write(
@@ -253,15 +252,17 @@ def main():
                 endpoint=v["endpoint"],
                 targetprefix=v["targetprefix"] if "targetprefix" in v else "",
             )
-        with open(port_config_path, "w") as f:
-            f.write(
-                http_server_template.format(
-                    subdomains=subdomains,
-                    url=url,
-                    port=v["port"],
-                    locations=textwrap.indent(location, "  "),
+        if v["type"] != "static":
+            port_config_path = f"/etc/nginx/http.d/port_{v['port']}.conf"
+            with open(port_config_path, "w") as f:
+                f.write(
+                    http_server_template.format(
+                        subdomains=subdomains,
+                        url=url,
+                        port=v["port"],
+                        locations=textwrap.indent(location, "  "),
+                    )
                 )
-            )
         locations += location
     # write insecure port reverse-proxy
     with open("/etc/nginx/http.d/port_80.conf", "w") as f:
