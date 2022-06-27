@@ -276,7 +276,7 @@ def main():
                         certbot_location_template.format(
                             certbot_host=os.environ["CERTBOT_HOST"]
                         )
-                        if "CERTBOT_HOST" in os.environ
+                        if "CERTBOT_HOST" in os.environ and os.getenv("CERTBOT_HOST")
                         else ""
                     )
                     + (
