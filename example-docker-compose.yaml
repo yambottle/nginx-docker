@@ -7,7 +7,7 @@ x-net:
 services:
   fakeservices.datajoint.io:
     <<: *net
-    image: datajoint/nginx:v0.2.1
+    image: datajoint/nginx:v0.2.3
     environment:
       ## Supply configs in the convention ADD_{service}_{config}
       ## Example database
