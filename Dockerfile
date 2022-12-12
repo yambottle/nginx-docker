@@ -5,7 +5,7 @@ RUN \
     apk update && \
     apk add openssl nginx nginx-mod-stream && \
     pip install \
-        --platform=manylinux2010_x86_64 \
+        --platform=musllinux_1_1_x86_64 \
         --only-binary=:all: \
         --target=/usr/local/lib/python3.10/site-packages \
         --no-cache-dir \
