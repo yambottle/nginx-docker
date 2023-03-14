@@ -7,3 +7,4 @@
 - Remove old key directory
 - Run docker-compose
 - Copy key over
+- Remove DNS record
