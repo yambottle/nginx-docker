@@ -13,30 +13,6 @@ services:
       ## Example database
       - ADD_db_ENDPOINT=db:3306
       - ADD_db_TYPE=DATABASE
-      ## Example REST API
-      - ADD_pharus_ENDPOINT=pharus:5000
-      - ADD_pharus_PREFIX=/api
-      - ADD_pharus_TYPE=REST
-      - ADD_pharus_PORT=2500 # optional port change
-      - ADD_pharus_TARGETPREFIX=/v0 # optional prefix map
-      ## Example S3 with bucket prefix
-      - ADD_minio_ENDPOINT=minio:9000
-      - ADD_minio_PREFIX=/datajoint
-      - ADD_minio_TYPE=MINIO
-      - ADD_minio_PORT=8000 # optional port change
-      ## Example MinIO Console Browser
-      - ADD_minioadmin_ENDPOINT=minio:9000
-      - ADD_minioadmin_TYPE=MINIOADMIN
-      - ADD_minioadmin_PORT=7000 # optional port change
-      ## Example static file serve
-      - ADD_zlabbook_PREFIX=/
-      - ADD_zlabbook_TYPE=STATIC
-      - ADD_zlabbook_PORT=2000 # optional port change
-      ## Example add certbot
-      - CERTBOT_HOST=letsencrypt:80
-      ## Example override default domain spec
-      - SUBDOMAINS=subdomain1
-      - URL=domain.com
       ## Example upgrade HTTP -> HTTPS
       - HTTPS_PASSTHRU=TRUE
     volumes:
