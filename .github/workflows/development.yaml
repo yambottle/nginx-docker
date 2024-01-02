@@ -5,23 +5,17 @@ on:
   pull_request:
 
 jobs:
-
   build:
+    runs-on: ubuntu-latest
 
-    runs-on: ubuntu-latest      
-      
     steps:
-      -
-        name: Checkout 
+      - name: Checkout
         uses: actions/checkout@v2
-      -
-        name: Set up Docker Buildx
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
-      -
-        name: Build Nginx Image
-        run: docker buildx bake --set "*.platform=linux/amd64" --load
-      -
-        name: Login to Docker Hub
+      - name: Build Nginx Image
+        run: TAG=test docker buildx bake --set "*.platform=linux/amd64" --load
+      - name: Login to Docker Hub
         if: |
           github.event_name == 'push' &&
           startsWith(github.ref, 'refs/tags') &&
@@ -34,8 +28,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
-      -
-        name: Push Nginx Image
+      - name: Push Nginx Image
         if: |
           github.event_name == 'push' &&
           startsWith(github.ref, 'refs/tags') &&
@@ -44,11 +37,13 @@ jobs:
             github.repository_owner == 'datajoint-company' ||
             github.repository_owner == 'dj-sciops'
           )
-        run: docker-compose push
-        
+        run: |
+          TAG=${{github.ref_name}} docker buildx bake --set "*.platform=linux/amd64" --load
+          TAG=${{github.ref_name}} docker-compose push
+
         #uses: docker/build-push-action@v2
         #with:
-          #context: frontend
-          #file: Dockerfile
-          #push: true
-          #tags: ${{ secrets.DOCKER_HUB_USERNAME }}/nginx:latest
+        #context: frontend
+        #file: Dockerfile
+        #push: true
+        #tags: ${{ secrets.DOCKER_HUB_USERNAME }}/nginx:latest
