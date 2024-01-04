@@ -16,7 +16,7 @@ jobs:
       CERT_STAGING: "True"
       ROUTE53_ZONE_NAME: "datajoint.io"
       ROUTE53_RECORD_NAME: "auto-letsencrypt"
-      MANUAL_LETSENCRYPT_REPO: "https://github.com/datajoint/manual-letsencrypt.git"
+      MANUAL_LETSENCRYPT_REPO: "datajoint/manual-letsencrypt"
       MANUAL_LETSENCRYPT_BRANCH: "master"
       CALLER_REPO_SUBPATH_FOR_CERT: "./nginx"
       PR_REVIEWERS: "yambottle"
