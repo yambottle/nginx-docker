@@ -1,0 +1,27 @@
+name: Auto Cert Renewal
+
+on:
+  workflow_dispatch:
+  # schedule:
+  #   - cron: '0 0 1 * *'
+
+jobs:
+  call-cert-renewal:
+    uses: yambottle/datajoint.github/.github/workflows/cert-renewal@DEV-58-cert-renewal
+    with:
+      CERT_CONTACT_EMAIL: "status@datajoint.com"
+      CERT_STAGING: "True"
+      ROUTE53_ZONE_NAME: "datajoint.io"
+      ROUTE53_RECORD_NAME: "auto-letsencrypt"
+      MANUAL_LETSECRYPT_REPO: "https://github.com/yambottle/manual-letsencrypt.git"
+      MANUAL_LETSECRYPT_BRANCH: "automation"
+      CALLER_REPO_SUBPATH_FOR_CERT: "./nginx"
+      PR_REVIEWERS: "yambottle"
+    secrets:
+      ROUTE53_ZONE_ID: ${{ secrets.ROUTE53_ZONE_ID }}
+      INSTANCE_VPC_SECURITY_GROUP_IDS: ${{ secrets.INSTANCE_VPC_SECURITY_GROUP_IDS }}
+      INSTANCE_SUBNET_ID: ${{ secrets.INSTANCE_SUBNET_ID }}
+      AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
