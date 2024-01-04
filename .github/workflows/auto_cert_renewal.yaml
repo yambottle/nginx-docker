@@ -7,7 +7,7 @@ on:
 
 jobs:
   call-cert-renewal:
-    uses: yambottle/datajoint.github/.github/workflows/cert-renewal@DEV-58-cert-renewal
+    uses: yambottle/datajoint.github/.github/workflows/cert-renewal.yaml@DEV-58-cert-renewal
     with:
       CERT_CONTACT_EMAIL: "status@datajoint.com"
       CERT_STAGING: "True"
