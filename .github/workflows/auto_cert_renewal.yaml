@@ -14,12 +14,15 @@ jobs:
     with:
       CERT_CONTACT_EMAIL: "status@datajoint.com"
       CERT_STAGING: "True"
+      # CERT_STAGING: "False"
       ROUTE53_ZONE_NAME: "datajoint.io"
       ROUTE53_RECORD_NAME: "auto-letsencrypt"
+      # ROUTE53_RECORD_NAME: "fakeservices"
       MANUAL_LETSENCRYPT_REPO: "datajoint/manual-letsencrypt"
       MANUAL_LETSENCRYPT_BRANCH: "master"
       CALLER_REPO_SUBPATH_FOR_CERT: "./nginx"
       PR_REVIEWERS: "yambottle"
+      # PR_REVIEWERS: "yambottle,ethho,jverswijver"
     secrets:
       ROUTE53_ZONE_ID: ${{ secrets.ROUTE53_ZONE_ID }}
       INSTANCE_VPC_SECURITY_GROUP_IDS: ${{ secrets.INSTANCE_VPC_SECURITY_GROUP_IDS }}
