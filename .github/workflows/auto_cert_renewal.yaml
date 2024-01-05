@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   call-cert-renewal:
-    uses: datajoint/.github/.github/workflows/cert-renewal.yaml
+    uses: datajoint/.github/.github/workflows/cert-renewal.yaml@main
     with:
       CERT_CONTACT_EMAIL: "status@datajoint.com"
       CERT_STAGING: "True"
