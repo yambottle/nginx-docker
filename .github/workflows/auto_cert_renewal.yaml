@@ -2,8 +2,8 @@ name: Auto Cert Renewal
 
 on:
   workflow_dispatch:
-  # schedule:
-  #   - cron: '0 0 1 * *'
+  schedule:
+    - cron: '0 0 1 */2 *'
 permissions:
   contents: write
   pull-requests: write
@@ -13,16 +13,16 @@ jobs:
     uses: datajoint/.github/.github/workflows/cert-renewal.yaml@main
     with:
       CERT_CONTACT_EMAIL: "status@datajoint.com"
-      CERT_STAGING: "True"
-      # CERT_STAGING: "False"
+      # CERT_STAGING: "True"
+      CERT_STAGING: "False"
       ROUTE53_ZONE_NAME: "datajoint.io"
-      ROUTE53_RECORD_NAME: "auto-letsencrypt"
-      # ROUTE53_RECORD_NAME: "fakeservices"
+      # ROUTE53_RECORD_NAME: "auto-letsencrypt"
+      ROUTE53_RECORD_NAME: "fakeservices"
       MANUAL_LETSENCRYPT_REPO: "datajoint/manual-letsencrypt"
       MANUAL_LETSENCRYPT_BRANCH: "master"
       CALLER_REPO_SUBPATH_FOR_CERT: "./nginx"
-      PR_REVIEWERS: "yambottle"
-      # PR_REVIEWERS: "yambottle,ethho,jverswijver"
+      # PR_REVIEWERS: "yambottle"
+      PR_REVIEWERS: "yambottle,ethho,jverswijver"
     secrets:
       ROUTE53_ZONE_ID: ${{ secrets.ROUTE53_ZONE_ID }}
       INSTANCE_VPC_SECURITY_GROUP_IDS: ${{ secrets.INSTANCE_VPC_SECURITY_GROUP_IDS }}
