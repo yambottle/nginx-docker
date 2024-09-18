@@ -26,5 +26,5 @@ CMD ["main"]
 # DATAJOINT DEFAULTS
 COPY ./nginx/privkey.pem /etc/letsencrypt/live/fakeservices.datajoint.io/privkey.pem
 COPY ./nginx/fullchain.pem /etc/letsencrypt/live/fakeservices.datajoint.io/fullchain.pem
-ENV SUBDOMAINS fakeservices
-ENV URL datajoint.io
+ENV SUBDOMAINS=fakeservices
+ENV URL=datajoint.io
