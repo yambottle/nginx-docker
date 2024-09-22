@@ -1,4 +1,4 @@
-FROM python:alpine
+FROM python:3.11-alpine
 
 COPY ./nginx/entrypoint.py /entrypoint.py
 RUN \
